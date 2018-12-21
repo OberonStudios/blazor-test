@@ -1,0 +1,33 @@
+﻿@page "/deletedata"
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<h1>Delete</h1>
+
+<form>
+  <div class="form-group">
+    <label for="nonce">Nonce</label>
+    <input bind="@current_id" type="number" class="form-control" id="nonce" />
+    Status: @status
+  </div>
+</form>
+<button class="btn btn-primary" onclick="@deletePerson">Click me</button>
+
+
+@functions {
+    int current_id;
+    string status = "n/a";
+
+    async void deletePerson()
+    {
+        var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+current_id);
+
+        if (response.IsSuccessStatusCode) {
+            UriHelper.NavigateTo("/fetchdata");
+        } else {
+            status = "404";
+            this.StateHasChanged();
+        }
+    }
+}
+

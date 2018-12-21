@@ -1,0 +1,58 @@
+﻿@page "/fetchdata"
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<h1>People</h1>
+
+@if (people == null)
+{
+    <p><em>Loading data...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in people)
+            {
+                <tr>
+                    <td>@person.id</td>
+                    <td>@person.name</td>
+                    <td><button onclick=@(()=>deletePerson(@person.id))>Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    Person[] people;
+
+    protected override async Task OnInitAsync()
+    {
+        people = await Http.GetJsonAsync<Person[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
+    }
+
+    class Person
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
+    async void deletePerson(int delete_id)
+    {
+        var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+delete_id);
+
+        if (response.IsSuccessStatusCode) {
+            people = await Http.GetJsonAsync<Person[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
+            this.StateHasChanged();
+        }
+    }
+}
+
