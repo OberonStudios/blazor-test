@@ -2,13 +2,26 @@
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<h3>Your Robot</h3>
-<p><img class="rounded-circle" src="https://robohash.org/@robot_id" alt="Generic placeholder image" width="400" height="400"></p>
-<h4>Name: @robot_name</h4>
-<h5>Skills:</h5>
 
-<p><a class="btn btn-secondary btn-block" href="/" role="button">Back</a></p>
-<p><button class="btn btn-danger btn-block" onclick=@(()=>deletePerson(@robot_id)) role="button">Remove</button></p>
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-pills card-header-pills">
+      <li class="nav-item">
+        <a class="nav-link active">Details</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled">More</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <p><img class="rounded-circle" src="https://robohash.org/@robot_id" alt="Generic placeholder image" width="400" height="400"></p>
+    <h5 class="card-title">Name: @robot_name</h5>
+    <p class="card-text">More features to be added</p>
+    <a href="/" class="btn btn-primary">Go back</a>
+    <a class="btn btn-danger" style="color: white;" onclick=@(()=>deletePerson(@robot_id)) role="button">Remove</a>
+  </div>
+</div>
 
 
 @functions {
