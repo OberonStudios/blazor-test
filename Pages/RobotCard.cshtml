@@ -1,0 +1,28 @@
+@page "/robot_details/{robot_name}/{robot_id}"
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<h3>Your Robot</h3>
+<p><img class="rounded-circle" src="https://robohash.org/@robot_id" alt="Generic placeholder image" width="400" height="400"></p>
+<h4>Name: @robot_name</h4>
+<h5>Skills:</h5>
+
+<p><a class="btn btn-secondary btn-block" href="/" role="button">Back</a></p>
+<p><button class="btn btn-danger btn-block" onclick=@(()=>deletePerson(@robot_id)) role="button">Remove</button></p>
+
+
+@functions {
+    [Parameter]
+    string robot_name { get; set; }
+    [Parameter]
+    string robot_id { get; set; }
+
+    async void deletePerson(string delete_id)
+    {
+        var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+delete_id);
+
+        if (response.IsSuccessStatusCode) {
+            UriHelper.NavigateTo("/");
+        }
+    }
+}

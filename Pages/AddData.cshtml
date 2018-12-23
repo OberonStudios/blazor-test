@@ -1,48 +1,105 @@
-﻿@page "/adddata"
+﻿@page "/get_robot"
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<h1>Add a person</h1>
+<h3>Create a new robot</h3>
 
 <form>
   <div class="form-group">
     <label for="name">Name</label>
     <input bind="@current_name" type="text" class="form-control" id="name" />
-    <small id="emailHelp" class="form-text text-muted">We'll never share your data with anyone else... I promise</small>
+    <small id="emailHelp" class="form-text text-muted">Our company doesn't share data with anyone else... I promise</small>
   </div>
-  <div class="form-group">
-    <label for="nonce">Nonce</label>
-    <input bind="@current_id" type="number" class="form-control" id="nonce" />
-    <small id="emailHelp" class="form-text text-muted">This is going to be your id</small>
+  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <button onclick=@increaseCount type="button" class="btn btn-secondary btn-sm">Prev</button>
+    <button onclick=@decreaseCount type="button" class="btn btn-secondary btn-sm">Next</button>
   </div>
 </form>
-<button class="btn btn-primary" onclick="@addPerson">Click me</button>
-<button class="btn btn-danger" onclick="@goHome">Home</button>
+<img class="rounded-circle @hidden" src="https://robohash.org/@current_id" alt="Generic placeholder image" width="200" height="200">
 
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+  <button class="btn btn-primary" onclick="@addPerson">Create</button>
+  <button class="btn btn-danger" onclick="@goHome">Home</button>
+</div>
 
 @functions {
-    string current_name;
-    int current_id;
+  static Random rnd = new Random();
+  string current_name;
+  string hidden = "d-none";
+  int current_id = rnd.Next(300);
 
-    protected async Task addPerson()
+  List<int> taken_ids = new List<int>();
+  Robot[] robots;
+
+  class Robot
+  {
+    public int id { get; set; }
+    public string name { get; set; }
+  }
+
+
+  protected override async Task OnInitAsync()
+  { 
+    robots = await Http.GetJsonAsync<Robot[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
+    
+    foreach (var robot in robots)
     {
-        await Http.SendJsonAsync(
-          HttpMethod.Post,
-          "https://fxns-at-azure.azurewebsites.net/api/post_data", 
-          new Person{id=current_id, name=current_name}
-        );
-
-        UriHelper.NavigateTo("/fetchdata");
+      taken_ids.Add(robot.id);
     }
-    void goHome()
+
+    if (taken_ids.Contains(current_id)) 
     {
+      increaseCount();
+    }
+
+    hidden = "";
+
+  }
+
+
+  protected async Task addPerson()
+  {
+      await Http.SendJsonAsync(
+        HttpMethod.Post,
+        "https://fxns-at-azure.azurewebsites.net/api/post_data", 
+        new Person{id=current_id, name=current_name}
+      );
+
       UriHelper.NavigateTo("/");
-    }
+  }
 
-    class Person
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-    }
+  void rerender() 
+  {
+    this.StateHasChanged();
+  }
+
+  void increaseCount()
+  {
+    do {
+      current_id++;
+    } while (taken_ids.Contains(current_id));
+
+    rerender();
+  }
+
+  void decreaseCount()
+  {
+    do {
+      current_id--;
+    } while (taken_ids.Contains(current_id));
+
+    rerender();
+  }
+
+  void goHome()
+  {
+    UriHelper.NavigateTo("/");
+  }
+
+  class Person
+  {
+      public int id { get; set; }
+      public string name { get; set; }
+  }
 }
 

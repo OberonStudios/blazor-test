@@ -3,13 +3,43 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width">
-    <title>BlazorApp1</title>
+    <title>CrpytoRobots</title>
     <base href="/" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .loader {
+          border: 16px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 16px solid #3498db;
+          width: 120px;
+          height: 120px;
+          -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+        }
+        
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>        
 </head>
 <body>
-    <app>Loading...</app>
+    <app>
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <h3>App is loading...</h3>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="loader"></div>
+            <div class="row justify-content-md-center">
+        </div>
+    </app>
 
     <script src="_framework/blazor.webassembly.js"></script>
 </body>

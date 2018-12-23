@@ -1,7 +1,61 @@
-﻿@page "/"
+﻿@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<h1>Hello, world!</h1>
+@page "/"
 
-Welcome to your new app.
+<div class="jumbotron" style="padding:5.5rem;">
+    <h2 class="display-4">Welcome to CryptoRobots!</h2>
+    <p class="lead">A tiny webapp build with Blazor, new experimental .NET framework. <a href="https://blazor.net">Learn more</a></p>
+    <hr class="my-4">
+    <p>We don't have anything to do with Crypto, or Bitcoin, or CryptoKitties. CryptoRobots just sounds better than Robots, that's all.</p>
+    <a class="btn btn-primary btn-lg" href="/get_robot" role="button">Create a Robot</a>
+</div>
+<div class="container marketing">
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <div class="row">
+    @if (people == null)
+    {
+        <p><em>Loading all robots...</em></p>
+    }
+    else
+    {
+        @foreach (var person in people)
+        {
+            <div class="col-lg-4">
+                <img class="rounded-circle" src="https://robohash.org/@person.id" alt="Generic placeholder image" width="200" height="200">
+                <h2>@person.name</h2>
+                <p><a class="btn btn-secondary btn-block" href="/robot_details/@person.name/@person.id" role="button">Details</a></p>
+                <p><button class="btn btn-danger btn-block" onclick=@(()=>deletePerson(@person.id)) role="button">Remove</button></p>
+            </div>
+        }
+
+    }
+    </div>
+</div>
+
+
+@functions {
+    Person[] people;
+
+    protected override async Task OnInitAsync()
+    {
+        people = await Http.GetJsonAsync<Person[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
+    }
+
+    class Person
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
+    async void deletePerson(int delete_id)
+    {
+        var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+delete_id);
+
+        if (response.IsSuccessStatusCode) {
+            people = await Http.GetJsonAsync<Person[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
+            this.StateHasChanged();
+        }
+    }
+}
+
