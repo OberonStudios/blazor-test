@@ -7,17 +7,23 @@
   <div class="card-header">
     <ul class="nav nav-pills card-header-pills">
       <li class="nav-item">
-        <a class="nav-link active">Details</a>
+        <a class="nav-link @nav_items[0]" onclick="@(()=>setTabId(0))">Details</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled">More</a>
+        <a class="nav-link @nav_items[1]" onclick="@(()=>setTabId(1))">More</a>
       </li>
     </ul>
   </div>
   <div class="card-body">
-    <p><img class="rounded-circle img-fluid" src="https://robohash.org/@robot_id" alt="Generic placeholder image" width="400" height="400"></p>
-    <h5 class="card-title">Name: @robot_name</h5>
-    <p class="card-text">More features to be added</p>
+    @if (tab_id==0)
+    {
+      <p><img class="rounded-circle img-fluid" src="https://robohash.org/@robot_id" alt="Generic placeholder image" width="400" height="400"></p>
+      <h5 class="card-title">Name: @robot_name</h5>
+    }
+    @if (tab_id==1)
+    {
+      <p class="card-text">Robot Unique ID: @robot_id</p> 
+    }
     <a href="/" class="btn btn-primary">Back</a>
     <a class="btn btn-danger" style="color:#fff;" onclick="@(()=>deletePerson(@robot_id))" role="button">Remove</a>
   </div>
@@ -25,17 +31,37 @@
 
 
 @functions {
-    [Parameter]
-    string robot_name { get; set; }
-    [Parameter]
-    string robot_id { get; set; }
+  [Parameter]
+  string robot_name { get; set; }
+  [Parameter]
+  string robot_id { get; set; }
+  
+  int tab_id = 0;
+  string[] nav_items = new string[] {"active","disabled"};
 
-    async void deletePerson(string delete_id)
+  void setTabId(int num)
+  {
+    if (num==0) 
     {
-        var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+delete_id);
-
-        if (response.IsSuccessStatusCode) {
-            UriHelper.NavigateTo("/");
-        }
+      nav_items[nav_items.Length-1] = "disabled";
     }
+    else
+    {
+      nav_items[num-1] = "disabled";
+    }
+
+    tab_id = num;
+    nav_items[tab_id] = "active";
+    
+    Console.WriteLine(tab_id);
+  }
+
+  async void deletePerson(string delete_id)
+  {
+    var response = await Http.DeleteAsync("https://fxns-at-azure.azurewebsites.net/api/delete_data?id="+delete_id);
+
+    if (response.IsSuccessStatusCode) {
+      UriHelper.NavigateTo("/");
+    }
+  }
 }

@@ -1,4 +1,7 @@
-﻿/* Loader byW3 School */
+﻿/* Load fonts */
+ @import url('https://fonts.googleapis.com/css?family=Racing+Sans+One');
+ @import url('https://fonts.googleapis.com/css?family=Cairo');
+/* Loader byW3 School */
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
@@ -21,7 +24,13 @@
 
 /* Custom css */
 /* Mobile style */
+body {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.1rem;
+}
+
 h2 {
+  font-family: 'Racing Sans One', cursive;
   font-size: 25px;
 }
 
@@ -54,6 +63,10 @@ label {
 
 /* Desktop style */
 @media only screen and (min-width: 768px) {
+  body {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.3rem;
+  }
   h2 {
     font-size: 45px;
   }
