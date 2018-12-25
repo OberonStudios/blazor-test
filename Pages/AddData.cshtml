@@ -2,25 +2,34 @@
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<h3>Create a new robot</h3>
 
-<form>
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input bind="@current_name" type="text" class="form-control" id="name" />
-    <small id="emailHelp" class="form-text text-muted">Our company doesn't share data with anyone else... I promise</small>
-  </div>
-  <div class="btn-group btn-group-toggle" data-toggle="buttons">
-    <button onclick=@increaseCount type="button" class="btn btn-secondary btn-sm">Prev</button>
-    <button onclick=@decreaseCount type="button" class="btn btn-secondary btn-sm">Next</button>
-  </div>
-</form>
-<img class="rounded-circle @hidden" src="https://robohash.org/@current_id" alt="Generic placeholder image" width="200" height="200">
 
-<div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <button class="btn btn-primary" onclick="@addPerson">Create</button>
-  <button class="btn btn-danger" onclick="@goHome">Home</button>
+<div class="card text-center">
+  <div class="card-header">
+    <h3>Create a new robot</h3>
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="form-group">
+        <p><img class="rounded-circle img-fluid @hidden" src="https://robohash.org/@current_id" alt="Generic placeholder image" width="400" height="400"></p>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <button onclick=@increaseCount type="button" class="btn btn-secondary btn-sm">Prev</button>
+          <button onclick=@decreaseCount type="button" class="btn btn-secondary btn-sm">Next</button>
+        </div>
+        <div id="input">
+          <label for="name">Name</label>
+          <input bind="@current_name" type="text" class="form-control" id="name" />
+        </div>
+        <small id="emailHelp" class="form-text text-muted">Our company doesn't share data with anyone else... I promise</small>
+      </div>
+    </form>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <button class="btn btn-primary" onclick="@addPerson">Create</button>
+      <button class="btn btn-danger" onclick="@goHome">Home</button>
+    </div>
+  </div>
 </div>
+
 
 @functions {
   static Random rnd = new Random();
