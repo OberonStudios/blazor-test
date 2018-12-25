@@ -5,9 +5,15 @@
 
 <div class="jumbotron">
     <h2>Welcome to CryptoRobots!</h2>
-    <p class="lead">A tiny webapp build with Blazor, new experimental .NET framework. <a href="https://blazor.net">Learn more</a></p>
+    <p class="lead">A tiny web app build with Blazor, new experimental .NET framework. <a href="https://blazor.net">Learn more</a></p>
     <hr class="my-4">
     <p>We don't have anything to do with Crypto, or Bitcoin, or CryptoKitties. CryptoRobots just sounds better than Robots, that's all.</p>
+    <div class="alert alert-warning @hidden" role="alert">
+        <button type="button" class="close" data-dismiss="alert" onclick="@close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>  
+        CryptoRobots is serverless app, which means it is prone to cold start issue. Please remain patient. Loading you experienced on initial page render also was not accidental. Open networking tab in your browser's developer tools, you would be surprised! For more information visit link above.
+    </div>
     <a class="btn btn-primary btn-lg" href="/get_robot" role="button">Create a Robot</a>
 </div>
 <div class="container marketing">
@@ -15,17 +21,17 @@
     <div class="row">
     @if (people == null)
     {
-        <p><em>Loading all robots...</em></p>
+        <p><em>Loading robots...</em></p>
     }
     else
     {
         @foreach (var person in people)
         {
             <div class="col-lg-4">
-                <img class="rounded-circle" src="https://robohash.org/@person.id" alt="Generic placeholder image" width="200" height="200">
+                <img class="rounded-circle img-fluid" src="https://robohash.org/@person.id" alt="Generic placeholder image" width="200" height="200">
                 <h2>@person.name</h2>
                 <p><a class="btn btn-secondary btn-block" href="/robot_details/@person.name/@person.id" role="button">Details</a></p>
-                <p><button class="btn btn-danger btn-block" onclick=@(()=>deletePerson(@person.id)) role="button">Remove</button></p>
+                <p><button class="btn btn-danger btn-block" onclick="@(()=>deletePerson(@person.id))" role="button">Remove</button></p>
             </div>
         }
 
@@ -33,9 +39,9 @@
     </div>
 </div>
 
-
 @functions {
     Person[] people;
+    string hidden = "";
 
     protected override async Task OnInitAsync()
     {
@@ -56,6 +62,10 @@
             people = await Http.GetJsonAsync<Person[]>("https://fxns-at-azure.azurewebsites.net/api/get_data");
             this.StateHasChanged();
         }
+    }
+
+    void close() {
+        hidden="d-none";
     }
 }
 

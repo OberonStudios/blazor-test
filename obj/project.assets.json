@@ -662,11 +662,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/aakatev/Documents/dotnet/BlazorApp1/BlazorApp1.csproj",
+      "projectUniqueName": "/home/aakatev/Documents/projects20/BlazorApp1/BlazorApp1.csproj",
       "projectName": "BlazorApp1",
-      "projectPath": "/home/aakatev/Documents/dotnet/BlazorApp1/BlazorApp1.csproj",
+      "projectPath": "/home/aakatev/Documents/projects20/BlazorApp1/BlazorApp1.csproj",
       "packagesPath": "/home/aakatev/.nuget/packages/",
-      "outputPath": "/home/aakatev/Documents/dotnet/BlazorApp1/obj/",
+      "outputPath": "/home/aakatev/Documents/projects20/BlazorApp1/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/share/dotnet/sdk/NuGetFallbackFolder"

@@ -2,8 +2,6 @@
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-
-
 <div class="card text-center">
   <div class="card-header">
     <h3>Create a new robot</h3>
@@ -11,7 +9,7 @@
   <div class="card-body">
     <form>
       <div class="form-group">
-        <p><img class="rounded-circle img-fluid @hidden" src="https://robohash.org/@current_id" alt="Generic placeholder image" width="400" height="400"></p>
+        <p><img class="rounded-circle img-fluid @hidden_pic" src="https://robohash.org/@current_id" alt="Generic placeholder image" width="400" height="400"></p>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <button onclick=@increaseCount type="button" class="btn btn-secondary btn-sm">Prev</button>
           <button onclick=@decreaseCount type="button" class="btn btn-secondary btn-sm">Next</button>
@@ -20,21 +18,24 @@
           <label for="name">Name</label>
           <input bind="@current_name" type="text" class="form-control" id="name" />
         </div>
+        <div class="alert alert-danger @hidden_alert" id="validation_alert" role="alert">
+          Please enter valid name. Should be at least 3 chars long!
+        </div>
         <small id="emailHelp" class="form-text text-muted">Our company doesn't share data with anyone else... I promise</small>
       </div>
     </form>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <button class="btn btn-primary" onclick="@addPerson">Create</button>
-      <button class="btn btn-danger" onclick="@goHome">Home</button>
+      <button class="btn btn-success" onclick="@addPerson">Create</button>
+      <button class="btn btn-primary" onclick="@goHome">Back</button>
     </div>
   </div>
 </div>
 
-
 @functions {
   static Random rnd = new Random();
   string current_name;
-  string hidden = "d-none";
+  string hidden_pic = "d-none";
+  string hidden_alert = "d-none";
   int current_id = rnd.Next(300);
 
   List<int> taken_ids = new List<int>();
@@ -61,20 +62,33 @@
       increaseCount();
     }
 
-    hidden = "";
+    hidden_pic = "";
 
   }
 
 
   protected async Task addPerson()
   {
-      await Http.SendJsonAsync(
-        HttpMethod.Post,
-        "https://fxns-at-azure.azurewebsites.net/api/post_data", 
-        new Person{id=current_id, name=current_name}
-      );
-
-      UriHelper.NavigateTo("/");
+    try
+    {
+      if (current_name.Length < 3 ) 
+      {
+        hidden_alert = "";
+      } 
+      else 
+      {
+        await Http.SendJsonAsync(
+          HttpMethod.Post,
+          "https://fxns-at-azure.azurewebsites.net/api/post_data", 
+          new Person{id=current_id, name=current_name}
+        );
+        UriHelper.NavigateTo("/");
+      }
+    }  
+    catch (NullReferenceException) 
+    {
+      hidden_alert = "";
+    }
   }
 
   void rerender() 
@@ -107,8 +121,8 @@
 
   class Person
   {
-      public int id { get; set; }
-      public string name { get; set; }
+    public int id { get; set; }
+    public string name { get; set; }
   }
 }
 

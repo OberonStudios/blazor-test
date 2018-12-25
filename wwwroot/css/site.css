@@ -27,6 +27,7 @@ h2 {
 
 #input {
   display: flex;
+  margin-top: 15px;
 }
 
 footer {
@@ -43,10 +44,23 @@ footer a {
   color: #999999;
 }
 
+#validation_alert {
+  margin-top: 10px;
+}
+
+label {
+  margin-right: 1rem;
+}
+
 /* Desktop style */
 @media only screen and (min-width: 768px) {
   h2 {
     font-size: 45px;
+  }
+
+  #validation_alert {
+    width: 50vw;
+    margin-left: 60px;
   }
 
   .jumbotron {
